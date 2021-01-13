@@ -46,7 +46,6 @@ class Typer {
     }
 
     type (text, speed=30, accuracy=0.05) {
-        console.log(...arguments);
         return new Promise(resolve => this.type_loop(resolve, text, speed, accuracy));
     }
 }
