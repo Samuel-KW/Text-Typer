@@ -6,51 +6,68 @@ class Typer {
         this.text = '';
         this.index = 0;
 
-        this.speed = 60;
-        this.accuracy = 0.05;
-
-        this.chars = 'qwertyuiopasdfghjklzxcvbnm';
+        this.chars = 'qwertyuiopasdfghjklzxcvbnm{}[]();';
     }
 
-    loop (resolve) {
+    type_loop (resolve, text, speed, accuracy) {
 
-        if (this.index >= this.text.length &&
-            this.element.textContent == this.text) return resolve();
+        if (this.index >= text.length &&
+            this.element.textContent == text) return resolve();
 
-
-        if (this.element.textContent[this.index - 1] != this.text[this.index - 1]) {
+        if (this.element.textContent.slice(0, this.index) != text.slice(0, this.index)) {
             
             this.element.textContent = this.element.textContent.slice(0, -1);
             this.index--;
             
-            return setTimeout(() => this.loop(resolve), this.speed * 2);
+            return setTimeout(() => this.type_loop.apply(this, arguments), speed);
         }
 
-        const is_mistake = Math.random() < this.accuracy;
+        const is_mistake = Math.random() < accuracy;
 
         this.element.textContent += is_mistake ?
             this.chars[Math.floor(Math.random() * this.chars.length)] :
-            this.text[this.index];
+            text[this.index];
         
         this.index++;
 
-        return setTimeout(() => this.loop(resolve), this.speed);
+        return setTimeout(() => this.type_loop.apply(this, arguments), speed * (is_mistake ? 5 : 1));
+    }
+    
+    clean_loop (resolve, speed=30) {
+        if (this.element.textContent == '')
+            return resolve();
+
+        this.element.textContent = this.element.textContent.slice(0, -1);
+        return setTimeout(() => this.clean_loop.apply(this, arguments), speed);
     }
 
-    type (text, speed=1, accuracy=0.05) {
+    clean (speed) {
+        return new Promise(resolve => this.clean_loop(resolve, speed));
+    }
 
-        this.text = text;
-        this.speed = speed;
-        this.accuracy = accuracy;
-
-        return new Promise(resolve => this.loop(resolve));
+    type (text, speed=30, accuracy=0.05) {
+        console.log(...arguments);
+        return new Promise(resolve => this.type_loop(resolve, text, speed, accuracy));
     }
 }
 
-let style = document.createElement('style');
+const style = document.createElement('style');
 style.textContent = `.typing-cursor::after { animation: cursor_blink .75s steps(1) infinite; display: inline-block; content: '_'; } @keyframes cursor_blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }`;;
 document.head.appendChild(style);
 
 
-let handle = new Typer(document.getElementById('header'));
-handle.type(Typer.toString(), 100, 0.5);
+const handle = new Typer(document.getElementById('header'));
+
+let typing = [ 'professional developer', '10+ years of backend experience', '3+ years of frontend experience', '10+ years of UI/UX Design', '5+ years of game development'],
+    index = 0;
+
+const loop = () => {
+
+    index >= typing.length && (index = 0);
+
+    handle.clean();
+    handle.type(typing[index++], 30, 0.05)
+        .then(() => setTimeout(loop, 4000));
+};
+
+loop();
