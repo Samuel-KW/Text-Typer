@@ -3,9 +3,7 @@ class Typer {
         this.element = element;
         this.element.classList.add('typing-cursor');
 
-        this.text = '';
         this.index = 0;
-
         this.chars = 'qwertyuiopasdfghjklzxcvbnm{}[]();';
     }
 
@@ -51,11 +49,12 @@ class Typer {
 }
 
 const style = document.createElement('style');
-style.textContent = `.typing-cursor::after { animation: cursor_blink 0.9s steps(1) infinite; display: inline-block; content: '_'; } @keyframes cursor_blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }`;;
+style.textContent = `.typing-cursor::after { animation: cursor_blink 1s steps(1) infinite; display: inline-block; content: '_'; } @keyframes cursor_blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }`;;
 document.head.appendChild(style);
 
 
-
+// DEMO CODE
+// Create a new handler for the text typer
 const handle = new Typer(document.getElementById('header'));
 
 let typing = [ 'professional developer', '10+ years of backend experience', '3+ years of frontend experience', '10+ years of UI/UX Design', '5+ years of game development'],
