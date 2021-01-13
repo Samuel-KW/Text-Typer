@@ -33,7 +33,7 @@ class Typer {
         return setTimeout(() => this.type_loop.apply(this, arguments), speed * (is_mistake ? 5 : 1));
     }
     
-    clean_loop (resolve, speed=30) {
+    clean_loop (resolve, speed) {
         if (this.element.textContent == '')
             return resolve();
 
@@ -41,7 +41,7 @@ class Typer {
         return setTimeout(() => this.clean_loop.apply(this, arguments), speed);
     }
 
-    clean (speed) {
+    clean (speed=30) {
         return new Promise(resolve => this.clean_loop(resolve, speed));
     }
 
@@ -56,6 +56,7 @@ style.textContent = `.typing-cursor::after { animation: cursor_blink .75s steps(
 document.head.appendChild(style);
 
 
+
 const handle = new Typer(document.getElementById('header'));
 
 let typing = [ 'professional developer', '10+ years of backend experience', '3+ years of frontend experience', '10+ years of UI/UX Design', '5+ years of game development'],
@@ -63,7 +64,7 @@ let typing = [ 'professional developer', '10+ years of backend experience', '3+ 
 
 const loop = () => {
 
-    index >= typing.length && (index = 0);
+    if (index >= typing.length) index = 0;
 
     handle.clean();
     handle.type(typing[index++], 30, 0.05)
