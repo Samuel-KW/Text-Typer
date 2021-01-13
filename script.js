@@ -51,7 +51,7 @@ class Typer {
 }
 
 const style = document.createElement('style');
-style.textContent = `.typing-cursor::after { animation: cursor_blink .75s steps(1) infinite; display: inline-block; content: '_'; } @keyframes cursor_blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }`;;
+style.textContent = `.typing-cursor::after { animation: cursor_blink 0.9s steps(1) infinite; display: inline-block; content: '_'; } @keyframes cursor_blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }`;;
 document.head.appendChild(style);
 
 
