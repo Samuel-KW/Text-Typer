@@ -1,6 +1,7 @@
 class Typer {
     constructor(element) {
         this.element = element;
+        this.element.classList.add('typing-cursor');
 
         this.text = '';
         this.index = 0;
@@ -46,25 +47,10 @@ class Typer {
     }
 }
 
-let css = `
-	.console::after {
-		transition: none;
-		display: inline-block;
-		content: '_';
-		animation: blinking 2s 0s ease infinite;
-	}
-
-	@keyframes blinking {
-		0% { opacity: 1; }
-		50% { opacity: 0; }
-		100% { opacity: 1; }
-	}
-`;
-
 let style = document.createElement('style');
-style.textContent = css;
+style.textContent = `.typing-cursor::after { animation: cursor_blink .75s steps(1) infinite; display: inline-block; content: '_'; } @keyframes cursor_blink { 0% { opacity: 1; } 50% { opacity: 0; } 100% { opacity: 1; } }`;;
 document.head.appendChild(style);
 
 
 let handle = new Typer(document.getElementById('header'));
-handle.type(Typer.toString());
+handle.type(Typer.toString(), 100, 0.5);
